@@ -14,4 +14,6 @@ public interface RoleService {
 	
 	public Role getRole(Integer roleId);
 	
+	public Role getDefaultRole();
+	
 }

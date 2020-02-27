@@ -17,6 +17,9 @@ public class UserServiceImpl implements UserService {
 	UserDao userDao;
 	
 	@Autowired
+	RoleService roleService;
+	
+	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@Override
@@ -31,6 +34,11 @@ public class UserServiceImpl implements UserService {
 	public void saveUser(User user) {
 		
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		
+		if(user.getRole()==null)
+		{
+			user.setRole(roleService.getDefaultRole());
+		}
 		
 		userDao.saveUser(user);
 	}

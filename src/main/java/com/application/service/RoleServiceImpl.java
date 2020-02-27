@@ -14,30 +14,32 @@ import com.application.entity.Role;
 
 @Service
 public class RoleServiceImpl implements RoleService {
-	
+
 	@Autowired
 	RoleDao roleDao;
-	
+
 	@Autowired
 	PermissionDao permissionDao;
 
+	private static final Integer DEFAULT_ROLE = new Integer(28);
+
 	@Override
 	public void saveRole(Role role) {
-		
+
 		roleDao.saveRole(role);
 	}
 
 	@Override
 	public List<Role> getRoles(Integer jtStartIndex, Integer jtPageSize, String jtSorting) {
 		List<Role> roleList = roleDao.getRoles(jtStartIndex, jtPageSize, jtSorting);
-		
+
 		roleList = roleList.stream().map(this::populatePermissionIds).collect(Collectors.toList());
 		return roleList;
 	}
-	
-	public Role populatePermissionIds(Role r)
-	{
-		List<Integer> permissionIdList = r.getPermissions().stream().map(p->p.getPermissionId()).collect(Collectors.toList());
+
+	public Role populatePermissionIds(Role r) {
+		List<Integer> permissionIdList = r.getPermissions().stream().map(p -> p.getPermissionId())
+				.collect(Collectors.toList());
 		r.setPermissionId(permissionIdList);
 		return r;
 	}
@@ -48,14 +50,17 @@ public class RoleServiceImpl implements RoleService {
 		List<Permission> permissionList = permissionDao.getPermissionsForIds(permissionIds);
 		role.setPermissions(new HashSet<Permission>(permissionList));
 		roleDao.saveRole(role);
-		
+
 	}
 
 	@Override
 	public Role getRole(Integer roleId) {
 		return roleDao.getRole(roleId);
 	}
-	
-	
+
+	@Override
+	public Role getDefaultRole() {
+		return getRole(DEFAULT_ROLE);
+	}
 
 }

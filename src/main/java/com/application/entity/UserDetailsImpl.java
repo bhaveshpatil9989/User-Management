@@ -1,8 +1,11 @@
 package com.application.entity;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserDetailsImpl implements UserDetails {
@@ -11,16 +14,31 @@ public class UserDetailsImpl implements UserDetails {
 	
 	private String username;
 	
+	private User user;
+	
 	public UserDetailsImpl(User user)
 	{
-		username =  user.getUsername();
-		password = user.getPassword();
+		this.username =  user.getUsername();
+		this.password = user.getPassword();
+		this.user=user;
 	}
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+
+		if (user == null) {
+			throw new IllegalArgumentException();
+		}
+		final List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+		final List<Permission> permissions = new ArrayList<>(user.getRole().getPermissions());
+		if ((permissions != null) && (!permissions.isEmpty())) {
+			for (int i = 0; i < permissions.size(); i++) {
+				final Permission permission = permissions.get(i);
+				final GrantedAuthority authority = new SimpleGrantedAuthority(permission.getPermissionName());
+				grantedAuthorities.add(authority);
+			}
+		}
+		return grantedAuthorities;
 	}
 
 	@Override
