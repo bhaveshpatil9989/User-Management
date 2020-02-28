@@ -39,7 +39,6 @@ public class RoleDaoImpl implements RoleDao{
         {
         	r.getPermissions().size();
         }
-        
 		return  list;
 	}
 	
@@ -47,7 +46,14 @@ public class RoleDaoImpl implements RoleDao{
 	public Role getRole(Integer roleId)
 	{
 		Session session = sessionFactory.openSession();
-		Role role = session.get(Role.class, roleId);
-		return role;
+		Query query = session.createQuery("SELECT r FROM Role r LEFT JOIN FETCH r.permissions WHERE r.roleId=:rid");
+		query.setParameter("rid", roleId);
+        List<Role> list = query.getResultList();
+		//Role role = session.get(Role.class, roleId);
+        if(!list.isEmpty())
+        {
+        		list.get(0).getPermissions();
+        }
+		return list.isEmpty()?null:list.get(0);
 	}
 }
