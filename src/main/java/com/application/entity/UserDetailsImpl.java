@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.application.service.RoleService;
 
 public class UserDetailsImpl implements UserDetails {
 
@@ -30,6 +33,7 @@ public class UserDetailsImpl implements UserDetails {
 			throw new IllegalArgumentException();
 		}
 		final List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+		
 		final List<Permission> permissions = new ArrayList<>(user.getRole().getPermissions());
 		if ((permissions != null) && (!permissions.isEmpty())) {
 			for (int i = 0; i < permissions.size(); i++) {
