@@ -1,13 +1,16 @@
 package com.application.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="user")
@@ -35,7 +38,10 @@ public class User {
 	@Column(name="address")
 	private String address;
 	
-	@ManyToOne
+	@Transient
+	private Integer roleId;
+	
+	@ManyToOne(fetch=FetchType.EAGER, cascade= {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name="role_id",nullable=false, updatable=false)
 	Role role;
 	
@@ -102,6 +108,16 @@ public class User {
 	public void setRole(Role role) {
 		this.role = role;
 	}
+
+	public Integer getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
+	}
+	
+	
 	
 	
 

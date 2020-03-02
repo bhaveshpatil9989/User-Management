@@ -1,115 +1,68 @@
 
-var permissionArr = [];
 $(document).ready(function() {
-
-$(".select").chosen({
-	width : "100%"
-});
-
-$('#exampleModal').on('hidden.bs.modal', function(e) {
-	permissionArr.splice(0, permissionArr.length);
-});
-
-$('#permissionsDwn').on('change', function(evt, params) {
-    console.log('Change event '+params)
-    permissionArr.push({'permissionId': params.selected});  
-});
-
-$('#addRoleBtn').on('click',
-		function(e) {
-			$.ajax({
-				type : 'GET',
-				url : '/permission',
-				success : function(data) {
-					var str = "";
-					for (var i = 0; i < data.length; i++) {
-						str += "<option value='" + data[i]["permissionId"]
-								+ "'>" + data[i]["permissionName"]
-								+ "</option>";
-					}
-					$("#permissionsDwn").empty();
-					$("#permissionsDwn").append(str);
-					$('#permissionsDwn').val('').trigger('chosen:updated');
-				},
-				error : function(msg) {
-					alert('error :'+ msg);
-				}
-			});
-		});
-
-	$('#modelSave').on("click", function(e) {
-		var rolejson = {
-			"roleName" : $("#roleName").val(),
-			"description" : $("#description").val(),
-			"permissions" : permissionArr
-		};
-		console.log(JSON.stringify(rolejson));
-		$.ajax({
-			type : 'POST',
-			url : '/role/addRole',
-			headers : {
-				'_csrf' : $("meta[name='_csrf']").attr("content"),
-				'_csrf_header' : $("meta[name='_csrf_header']").attr("conten")
-			},
-			dataType : 'json',
-			contentType: 'application/json',
-			data : JSON.stringify(rolejson),
-			beforeSend : function(x) {
-				if (x && x.overrideMimeType) {
-					x.overrideMimeType("application/json");
-				}
-			},
-			success : function(data) {
-				var str = "";
-			},
-			error : function(msg) {
-				alert('error : ' + msg);
-			}
-		})
-	});
-	
-	        $('#roleTableContainer').jtable({
-	            title: 'The Role List',
+	        $('#userTableContainer').jtable({
+	            title: 'The User List',
 	            paging: true, //Enable paging
 	            pageSize: 10, //Set page size (default: 10)
 	            sorting: true, //Enable sorting
 	            defaultSorting: 'Name ASC', //Set default sorting
 	            actions: {
-	                listAction: '/role/roleList',
-	                deleteAction: '/role/deleteRole',
-	                updateAction: '/role/updateRole',
-	                createAction: '/role/addRole'
+	                listAction: '/user/userList',
+	                deleteAction: '/user/deleteUser',
+	                updateAction: '/user/updateUser'
+	           /*     createAction: '/user/addUser'*/
 	            },
 	            fields: {
-				roleId : {
+				id : {
 							key : true,
 							create : false,
 							edit : false,
 							list : false
 						},
-						roleName : {
-							title : 'Name',
-							width : '23%'
+						username : {
+							title : 'Username',
+							width : '23%',
+							create : false,
+							edit : false,
+							list : true
 						},
-						description :
+						firstName :
 						{
-							title : 'Description',
+							title : 'First Name',
 							width :'23%',
-							type: 'textarea'
+							create : false,
+							edit : false,
+							list : true
 						},
-						permissionId: {
+						lastName :
+						{
+							title : 'Last Name',
+							width :'23%',
+							create : false,
+							edit : false,
+							list : true
+						},
+						email :
+						{
+							title : 'Email',
+							width :'23%',
+							create : false,
+							edit : false,
+							list : true
+						},
+						roleId: {
 							inputClass : 'selectpicker',
-		                    title: 'Permissions',
-		                    type: 'multiselectddl',
-		                    list: false,
+		                    title: 'Role',
+		                    create : false,
+		                    list: true,
 		                    options: function(data) {
 		                        if (data.source == 'list') {
 		                            //Return url all options for optimization. 
-		                            return '/permission/rolePermissionsForRole?roleId='+  data.record.roleId;//'/permission/rolePermissionsForRole?roleId=27';
+		                            return '/role/userRoleforUser?username=' + data.record.username;//'/role/userRoleforUser?username=test123';
 		                        }
 		                        //This code runs when user opens edit/create form to create combobox.
 		                        //data.source == 'edit' || data.source == 'create'
-		                        return '/permission/rolePermissions';
+		                        return '/role/userRoles';
 		                    }
 						//'/permission/rolePermissions'
 		                }
@@ -182,5 +135,5 @@ $('#addRoleBtn').on('click',
 	        });
 	 
 	        //Load student list from server
-	        $('#roleTableContainer').jtable('load');
+	        $('#userTableContainer').jtable('load');
 });

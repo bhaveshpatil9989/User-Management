@@ -1,6 +1,8 @@
 package com.application.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +13,7 @@ import com.application.dao.PermissionDao;
 import com.application.dao.RoleDao;
 import com.application.entity.Permission;
 import com.application.entity.Role;
+import com.application.jtable.role.Option;
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -25,7 +28,9 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public void saveRole(Role role) {
-
+		List<Integer> permissionIds = role.getPermissionId();
+		List<Permission> permissionList = permissionDao.getPermissionsForIds(permissionIds);
+		role.setPermissions(new HashSet<Permission>(permissionList));
 		roleDao.saveRole(role);
 	}
 
@@ -62,5 +67,31 @@ public class RoleServiceImpl implements RoleService {
 	public Role getDefaultRole() {
 		return getRole(DEFAULT_ROLE);
 	}
+	
+	@Override
+	public void deleteRole(Role role)
+	{
+		roleDao.deleteRole(role);
+	}
+	
+	@Override
+	public List<Option> getRoleOption(List<Role> roleList) {
+		List<Option> optionList = new ArrayList<Option>();
+		if(null != roleList && !roleList.isEmpty())
+		{
+			Iterator<Role> itr = roleList.iterator();
+			while(itr.hasNext())
+			{
+				Role role = itr.next();
+				
+				optionList.add(new Option(role.getRoleId().toString(),role.getRoleName()));
+			}
+		}
+		return optionList;
+	}
 
+	@Override
+	public List<Role> getAllRoles() {
+		return roleDao.getAllRoles();
+	}
 }

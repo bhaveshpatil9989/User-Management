@@ -47,7 +47,6 @@ public class PermissionController {
 	public @ResponseBody JsonResult<Option> getPermissionsForRole(@RequestParam("roleId") Integer roleId) {
 		
 		try {
-			
 			List<Permission> permissionList = new ArrayList<>(roleService.getRole(roleId).getPermissions());
 			List<Option> options = permissionService.getPermissionOption(permissionList);
 			return new Json<Option>("OK", options);

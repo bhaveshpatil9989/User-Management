@@ -11,5 +11,8 @@ public interface RoleDao {
 	public List<Role> getRoles(Integer jtStartIndex, Integer jtPageSize, String jtSorting);
 	
 	public Role getRole(Integer roleId);
-
+	
+	public void deleteRole(Role role);
+	
+	public List<Role> getAllRoles();
 }

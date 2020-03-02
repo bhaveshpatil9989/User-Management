@@ -18,17 +18,7 @@
   <div class="d-flex" id="wrapper">
 
     <!-- Sidebar -->
-    <div class="bg-light border-right" id="sidebar-wrapper">
-      <div class="sidebar-heading">Start Bootstrap </div>
-      <div class="list-group list-group-flush">
-        <a href="/dashboard.html" class="list-group-item list-group-item-action bg-light">Dashboard</a>
-        <a href="/role" class="list-group-item list-group-item-action bg-light">Shortcuts</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Overview</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Events</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>
-        <a href="/logout" class="list-group-item list-group-item-action bg-light">Logout</a>
-      </div>
-    </div>
+    <jsp:include page="sidebar.jsp"/>
     <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->

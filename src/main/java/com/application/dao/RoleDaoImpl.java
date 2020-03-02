@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.application.entity.Permission;
 import com.application.entity.Role;
 
 @Repository
@@ -19,6 +20,7 @@ public class RoleDaoImpl implements RoleDao{
 	@Autowired
 	SessionFactory sessionFactory;
 	
+	@Override
 	public void saveRole(Role role)
 	{
 		Session session = sessionFactory.openSession();
@@ -39,6 +41,7 @@ public class RoleDaoImpl implements RoleDao{
         {
         	r.getPermissions().size();
         }
+        session.close();
 		return  list;
 	}
 	
@@ -54,6 +57,26 @@ public class RoleDaoImpl implements RoleDao{
         {
         		list.get(0).getPermissions();
         }
+        session.close();
 		return list.isEmpty()?null:list.get(0);
+	}
+	
+	@Override
+	public void deleteRole(Role role)
+	{
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		session.delete(role);
+		tx.commit();
+		session.close();
+	}
+	
+	@Override
+	public List<Role> getAllRoles() {
+		Session session=sessionFactory.openSession();
+		Query<Role> query = session.createQuery("From Role",Role.class);
+		List<Role> roleList = query.getResultList();
+		session.close();
+		return roleList;
 	}
 }

@@ -17,6 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -46,13 +47,14 @@ public class Role {
 	public void setPermissionId(List<Integer> permissionId) {
 		this.permissionId = permissionId;
 	}
-
+	@JsonIgnore
 	@ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name="role_permission",
 		joinColumns= {@JoinColumn(name="role_id")},
 		inverseJoinColumns= {@JoinColumn(name="permission_id")})
 	private Set<Permission> permissions;
 
+	@JsonIgnore
 	public Set<Permission> getPermissions() {
 		return permissions;
 	}

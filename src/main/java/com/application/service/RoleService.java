@@ -3,6 +3,7 @@ package com.application.service;
 import java.util.List;
 
 import com.application.entity.Role;
+import com.application.jtable.role.Option;
 
 public interface RoleService {
 
@@ -15,5 +16,11 @@ public interface RoleService {
 	public Role getRole(Integer roleId);
 	
 	public Role getDefaultRole();
+	
+	public void deleteRole(Role role);
+	
+	public List<Option> getRoleOption(List<Role> roleList);
+	
+	public List<Role> getAllRoles();
 	
 }
